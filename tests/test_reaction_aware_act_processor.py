@@ -9,11 +9,11 @@ from lerobot.configs.types import FeatureType, PolicyFeature
 import lerobot.policies.factory as policy_factory
 from lerobot.utils.constants import ACTION, OBS_IMAGES, OBS_STATE
 
-from lerobot_policy_spacepolicy_dit import ReactionAwareACTConfig, ReactionAwareACTPolicy
-from lerobot_policy_spacepolicy_dit.processor_reaction_aware_act import (
+from lerobot_policy_spacepolicy_act import ReactionAwareACTConfig, ReactionAwareACTPolicy
+from lerobot_policy_spacepolicy_act.processor_reaction_aware_act import (
     make_reaction_aware_act_pre_post_processors,
 )
-from lerobot_policy_spacepolicy_dit.reaction_phase_gate import ReactionAwarePhaseGateError
+from lerobot_policy_spacepolicy_act.reaction_phase_gate import ReactionAwarePhaseGateError
 
 
 def _config() -> ReactionAwareACTConfig:

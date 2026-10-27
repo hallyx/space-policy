@@ -2,48 +2,36 @@
 
 **ACT-based visuomotor learning for free-floating space manipulation.**
 
-SpacePolicy builds on [LeRobot](https://github.com/huggingface/lerobot)'s Action
-Chunking Transformer (ACT) to study robotic manipulation under base–arm
-coupling. It provides joint position–velocity action prediction, trajectory
-parameterization, auxiliary base-state prediction, and learned reaction
-modeling within the LeRobot policy interface.
+SpacePolicy extends [LeRobot](https://github.com/huggingface/lerobot)'s Action
+Chunking Transformer (ACT) with base-motion supervision and learned reaction
+modeling. Multi-view images and joint observations drive action-chunk
+prediction, while trajectory decoding and dynamics-related objectives support
+experiments with coupled base–arm motion.
 
-The repository contains the ACT-based method components, policy configurations,
-and tests. Simulation scenes, robot and satellite assets, datasets, and trained
-weights are not distributed.
+This repository provides the ACT-based policies, configuration profiles, and
+tests. Simulation scenes, robot and satellite assets, datasets, and pretrained
+weights are not included.
 
-## Features
+## Methods
 
-- **LeRobot ACT backbone:** multi-view RGB and proprioceptive inputs, CVAE
-  training, action-chunk prediction, and native checkpoint support.
-- **Joint position–velocity actions:** seven arm positions, seven desired
-  velocities, and one gripper command.
-- **Spline trajectory decoding:** piecewise cubic Hermite trajectories from
-  ACT action proposals.
-- **Base auxiliary prediction:** action-conditioned supervision of relative
-  base motion and future base velocity.
-- **Reaction-aware planning:** a learned transition model propagates predicted
-  robot state across action micro-chunks.
-- **ACT temporal aggregation:** utilities for combining overlapping action
-  predictions in the native ACT inference path.
+| Policy | Description |
+| --- | --- |
+| `act` | Native LeRobot ACT baseline with CVAE training and action chunking |
+| `spline_act` | ACT proposals decoded into piecewise Hermite joint trajectories |
+| `base_aux_spline_act` | Spline ACT with an action-conditioned base-motion auxiliary head |
+| `reaction_aware_act` | ACT with learned reaction-state rollout and optional base auxiliary supervision |
 
-## Policy variants
+The auxiliary head predicts relative base motion and future velocity for
+training supervision. The Reaction model predicts robot-state transitions
+between action micro-chunks. Hermite decoding, rigid-body geometry, state
+contracts, and processor hooks support these ACT extensions.
 
-| Policy type | Implementation | Description |
-| --- | --- | --- |
-| `act` | LeRobot `ACTPolicy` | Native visual action-chunking baseline |
-| `spline_act` | `SplineACTPolicy` | ACT with Hermite joint-trajectory decoding |
-| `base_aux_spline_act` | `BaseAuxiliarySplineACTPolicy` | Spline ACT with a base-motion auxiliary objective |
-| `reaction_aware_act` | `ReactionAwareACTPolicy` | ACT with action-conditioned reaction rollout and optional base auxiliary supervision |
-
-The base auxiliary head in `base_aux_spline_act` is used for training
-supervision. In `reaction_aware_act`, the separate reaction model predicts
-states used by subsequent micro-chunks. These paths are implemented in the
-existing project code and retain their original behavior.
+Detailed architecture and manuscript correspondence are in
+[Implementation notes](docs/implementation.md).
 
 ## Installation
 
-Use Python 3.12 and a PyTorch installation compatible with your hardware.
+Use Python 3.12. For GPU training, install PyTorch for your CUDA version first.
 
 ```bash
 git clone https://github.com/hallyx/space-policy.git
@@ -54,35 +42,43 @@ python -m pip install --upgrade pip
 python -m pip install -e '.[dev]'
 ```
 
-Dependencies are declared in `pyproject.toml`. The Python package name
-`lerobot_policy_spacepolicy_dit` is retained for compatibility with the existing
-LeRobot plugin and checkpoints; the policy implementations included here are
-ACT-based.
+The package is `lerobot_policy_spacepolicy_act` and targets LeRobot 0.5.1.
+LeRobot discovers its policy configurations and processor hooks automatically
+when the package is installed. You can also import it explicitly:
 
-## Data interface
+```python
+import lerobot_policy_spacepolicy_act
+from lerobot.policies.factory import get_policy_class
 
-Provide your own dataset in LeRobot format. The training examples use the
-following observation and action layout:
+policy_class = get_policy_class("base_aux_spline_act")
+```
 
-| Field | Shape | Description |
+If upgrading from the earlier package name, follow the
+[compatibility notes](docs/implementation.md#package-compatibility).
+
+## Data
+
+Prepare your own LeRobot-format dataset with consistent camera names, joint
+order, units, and control frequency.
+
+| Feature | Shape per timestep | Meaning |
 | --- | --- | --- |
-| `observation.images.<camera>` | `[3, H, W]` | RGB image for each camera view |
-| `observation.state` | `[8]` | Seven arm joint positions and one gripper position |
-| `action` | `[15]` | Arm positions7 + desired velocities7 + gripper command1 |
+| `observation.images.<camera>` | `[3, H, W]` | RGB input for each camera |
+| `observation.state` | `[8]` | Seven measured arm positions and one gripper position |
+| `action` | `[15]` | Seven commanded positions, seven desired velocities, one gripper command |
 
-Camera names and feature dimensions are read from dataset metadata. Keep
-joint ordering, units, camera order, and sampling frequency consistent between
-training and deployment. LeRobot handles dataset loading and normalization.
+LeRobot handles dataset loading, normalization, temporal windows, and
+checkpoints. The native ACT baseline can infer feature dimensions from dataset
+metadata. The included extensions use the state8/action15 contract above.
 
-The base auxiliary variant additionally requires base-pose and base-velocity
-label windows. Reaction-aware policies require the current reaction state and
-a compatible learned transition model. Their exact fields and padding
-contracts are defined in the corresponding config and processor modules.
+Base-Aux ACT additionally needs base-pose and base-velocity label windows.
+Reaction ACT needs the current raw reaction state, preceding command, and a
+compatible transition-model checkpoint. See
+[Training and data contracts](docs/training.md) for the required fields.
 
 ## Training
 
-The native ACT baseline uses LeRobot's training entry point. Replace the
-dataset identifier and local path with your own:
+Train the native ACT baseline with LeRobot's standard entry point:
 
 ```bash
 python -m lerobot.scripts.lerobot_train \
@@ -92,12 +88,7 @@ python -m lerobot.scripts.lerobot_train \
   --policy.device=cuda \
   --policy.chunk_size=32 \
   --policy.n_action_steps=8 \
-  --policy.vision_backbone=resnet18 \
   --policy.pretrained_backbone_weights=null \
-  --policy.dim_model=512 \
-  --policy.n_heads=8 \
-  --policy.n_encoder_layers=4 \
-  --policy.n_decoder_layers=1 \
   --policy.optimizer_lr=1e-5 \
   --policy.push_to_hub=false \
   --batch_size=2 \
@@ -108,31 +99,30 @@ python -m lerobot.scripts.lerobot_train \
   --output_dir=outputs/act
 ```
 
-The settings above follow the project's native ACT baseline. Use a new output
-directory for each run. Policy profiles for all four variants are in
-[`configs/policies`](configs/policies); they document the model and execution
-settings. The YAML profiles include descriptive fields such as `state_dim`
-and `action_contract` and are not complete LeRobot training config files.
+Replace the dataset identifier and path with your own, and use a new output
+directory for each run. This command uses the ACT architecture defaults in
+LeRobot 0.5.1 and the project's 32-step/8-action baseline settings.
 
-For the ACT extensions, use the registered policy type and its matching config
-class, processor, and required dataset fields. Reaction-aware training uses a
-separate transition-model checkpoint through `reaction_model_checkpoint`.
-See the included policy tests for small, executable examples of constructing,
-training, and saving each variant without a simulator.
+The [policy profiles](configs/policies) describe all four variants. They
+contain model settings and descriptive schema fields, rather than complete
+serialized LeRobot training configurations. Extension commands and checkpoint
+requirements are documented in the [training guide](docs/training.md).
 
 ## Inference
 
-Load a trained ACT checkpoint with LeRobot:
+Load a checkpoint with its saved policy configuration and processors:
 
 ```python
 import torch
-from lerobot.policies.act.modeling_act import ACTPolicy
-from lerobot.policies.factory import make_pre_post_processors
+import lerobot_policy_spacepolicy_act
+from lerobot.configs.policies import PreTrainedConfig
+from lerobot.policies.factory import get_policy_class, make_pre_post_processors
 
 checkpoint = "outputs/act/checkpoints/last/pretrained_model"
-policy = ACTPolicy.from_pretrained(checkpoint)
+config = PreTrainedConfig.from_pretrained(checkpoint)
+policy = get_policy_class(config.type).from_pretrained(checkpoint, config=config)
 preprocess, postprocess = make_pre_post_processors(
-    policy_cfg=policy.config,
+    policy_cfg=config,
     pretrained_path=checkpoint,
 )
 policy.eval()
@@ -140,36 +130,38 @@ policy.reset()
 
 @torch.inference_mode()
 def predict(observation):
-    # Current RGB float CHW tensors in [0, 1], plus the measured joint state.
     return postprocess(policy.select_action(preprocess(observation)))
 ```
 
-Use the checkpoint's saved processors and statistics. Execute the returned
-action through your own robot or simulator interface, then acquire the next
-observation. Reset policy history at every episode boundary.
+Supply current RGB float CHW tensors in `[0, 1]` and the measured joint state,
+using the same camera names and physical units as training. Execute the output
+through your robot or simulator interface. Reset policy history at episode
+boundaries. Reaction ACT also requires its raw-state inputs and pre-contact
+admission fields, as described in the training guide.
 
-For native ACT temporal aggregation, set `n_action_steps=1` and a
-`temporal_ensemble_coeff`, for example `0.01`. The spline and reaction variants
-use latest-plan, single-step execution and disable ACT temporal aggregation.
-The current reaction implementation is restricted to its pre-contact state
-contract; see the phase gate and processor for the supported inputs.
+Native ACT supports temporal aggregation with `n_action_steps=1` and a
+`temporal_ensemble_coeff`. Spline, Base-Aux, and Reaction variants execute the
+latest single action and disable ACT temporal aggregation.
 
-## Project structure
+## Repository layout
 
 ```text
-configs/policies/                 Policy profiles
-src/lerobot_policy_spacepolicy_dit/
-  modeling_spline_act.py          ACT trajectory decoder
-  modeling_base_aux_spline_act.py ACT with base auxiliary supervision
-  modeling_reaction_aware_act.py  ACT with reaction rollout
-  reaction_model.py              Learned dynamics transition model
-  base_auxiliary.py              Base-motion prediction and losses
-  processor_*.py                 LeRobot data processors
-  configuration_*.py             Registered policy configurations
-  geometry.py                    Rigid-body geometry utilities
-  trajectory.py                  Hermite trajectory sampling
-  act_temporal_ensemble.py        ACT inference aggregation
-tests/                           Policy, geometry, and processor tests
+configs/policies/                       ACT and extension profiles
+src/lerobot_policy_spacepolicy_act/
+  modeling_spline_act.py                Hermite action decoding
+  modeling_base_aux_spline_act.py       ACT with base auxiliary supervision
+  modeling_reaction_aware_act.py        ACT with reaction rollout
+  reaction_model.py                    Learned state transition
+  base_auxiliary.py                    Base-motion labels, head, and losses
+  configuration_*.py                   LeRobot policy configurations
+  processor_*.py                       Label and state processing hooks
+  geometry.py                          Differentiable rigid-body geometry
+  trajectory.py                        Hermite trajectory sampling
+  reaction_state.py                    Raw reaction-state contracts
+  reaction_phase_gate.py               Pre-contact admission checks
+  act_temporal_ensemble.py              ACT inference aggregation
+docs/                                  Training and implementation details
+tests/                                 Policy, processor, and geometry tests
 ```
 
 ## Tests
@@ -178,19 +170,18 @@ tests/                           Policy, geometry, and processor tests
 OMP_NUM_THREADS=2 python -m pytest -q
 ```
 
-The tests use synthetic tensors and temporary checkpoints; no dataset or scene
-is required. Environment details and verification scope are recorded in
-[`VALIDATION.md`](VALIDATION.md). Implementation correspondence with the
-manuscript is documented separately in
-[`PAPER_CODE_AUDIT.md`](PAPER_CODE_AUDIT.md).
+Tests use synthetic tensors and temporary checkpoints. They cover action and
+base losses, reaction rollout, processor boundaries, policy registration,
+checkpoint round trips, temporal aggregation, and geometry. No scene or
+dataset is required.
 
 ## Acknowledgements
 
-This project uses LeRobot's ACT backbone, training loop, processors, and
-checkpoint infrastructure. ACT was introduced in *Learning Fine-Grained
-Bimanual Manipulation with Low-Cost Hardware* by Zhao et al.
+SpacePolicy uses LeRobot's ACT backbone, CVAE, training loop, processors, and
+checkpoint infrastructure. ACT was introduced by Zhao et al. in
+*Learning Fine-Grained Bimanual Manipulation with Low-Cost Hardware*.
 
 ## License
 
-MIT. See [`LICENSE`](LICENSE) and
-[`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md) for dependency attribution.
+MIT. See [LICENSE](LICENSE) and
+[third-party notices](THIRD_PARTY_NOTICES.md).

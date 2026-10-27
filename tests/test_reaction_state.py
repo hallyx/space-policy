@@ -1,7 +1,7 @@
 import numpy as np
 import pytest
 
-from lerobot_policy_spacepolicy_dit.reaction_state import (
+from lerobot_policy_spacepolicy_act.reaction_state import (
     LEFT15_DIM,
     REACTION_MODEL_STATE_DIM,
     Left15Command,

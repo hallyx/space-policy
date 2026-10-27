@@ -15,7 +15,7 @@ from lerobot.policies.factory import get_policy_class
 import lerobot.policies.factory as policy_factory
 from lerobot.utils.constants import ACTION, OBS_IMAGES, OBS_STATE
 
-from lerobot_policy_spacepolicy_dit import SplineACTConfig, SplineACTPolicy
+from lerobot_policy_spacepolicy_act import SplineACTConfig, SplineACTPolicy
 
 
 def _features() -> tuple[dict[str, PolicyFeature], dict[str, PolicyFeature]]:

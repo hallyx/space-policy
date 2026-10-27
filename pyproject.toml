@@ -3,20 +3,29 @@ requires = ["setuptools>=68"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "lerobot_policy_spacepolicy_dit"
+name = "lerobot_policy_spacepolicy_act"
 version = "0.1.0"
-description = "LeRobot-based ACT policies for free-floating space manipulation"
+description = "ACT-based visuomotor policies with base-motion supervision and reaction modeling"
 readme = "README.md"
 requires-python = ">=3.12"
 license = {text = "MIT"}
-dependencies = ["lerobot==0.5.1", "transformers==5.3.0", "diffusers>=0.27.2,<0.36.0", "pyzmq>=25"]
+dependencies = [
+  "lerobot==0.5.1",
+  "transformers==5.3.0",
+  "numpy>=2.0,<2.3",
+  "torch>=2.7,<2.11",
+]
 
 [project.optional-dependencies]
 dev = ["pytest>=8.0"]
 
+[project.urls]
+Repository = "https://github.com/hallyx/space-policy"
+Issues = "https://github.com/hallyx/space-policy/issues"
+
 [tool.setuptools.packages.find]
 where = ["src"]
-include = ["lerobot_policy_spacepolicy_dit*"]
+include = ["lerobot_policy_spacepolicy_act*"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

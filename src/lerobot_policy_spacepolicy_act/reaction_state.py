@@ -21,7 +21,7 @@ from typing import Any
 
 import numpy as np
 
-from lerobot_policy_spacepolicy_dit.base_condition import (
+from lerobot_policy_spacepolicy_act.base_condition import (
     BASE9_DIM,
     BASE15_DIM,
     base_environment_state_from_pose_velocity,

@@ -1,9 +1,8 @@
-"""Out-of-tree SpacePolicy policies with lazy optional dependencies.
+"""LeRobot ACT policies with base auxiliary and reaction-model extensions.
 
-Importing a lightweight utility submodule (for example the legacy episode
-sampler) must not eagerly import every experimental policy processor.  Those
-processors track different LeRobot API versions and are loaded only when their
-public symbol is actually requested.
+Configurations and type-gated processor hooks are registered on import so
+LeRobot's plugin discovery can resolve these policy types before CLI parsing.
+Model classes remain lazily imported.
 """
 
 from __future__ import annotations
@@ -37,7 +36,7 @@ _LAZY_EXPORTS: dict[str, tuple[str, str, str | None]] = {'ReactionAwareACTConfig
                                                'install_base_aux_spline_act_runtime_shims',
                                                'base_aux')}
 
-__all__ = list(_LAZY_EXPORTS)
+__all__ = [*list(_LAZY_EXPORTS), "register_policies"]
 _INSTALLED_HOOKS: set[str] = set()
 
 
@@ -70,3 +69,12 @@ def __getattr__(name: str) -> Any:
 
 def __dir__() -> list[str]:
     return sorted(set(globals()) | set(__all__))
+
+
+def register_policies() -> None:
+    """Register the ACT extensions and their processor hooks; safe to repeat."""
+    for name in ("SplineACTConfig", "ReactionAwareACTConfig", "BaseAuxiliarySplineACTConfig"):
+        __getattr__(name)
+
+
+register_policies()

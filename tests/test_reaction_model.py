@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import torch
 
-from lerobot_policy_spacepolicy_dit.reaction_model import (
+from lerobot_policy_spacepolicy_act.reaction_model import (
     LEFT_ARM_INDICES,
     LearnedReactionModel,
     REACTION_STATE_DIM,

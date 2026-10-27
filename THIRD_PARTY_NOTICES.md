@@ -1,17 +1,21 @@
-# Attribution and dependencies
+# Third-party notices
 
-Method and test source files were extracted from the user's existing SpacePolicy
-project under its existing MIT license. Their paths and hashes are recorded
-in provenance.json. This is not a newly authored replacement model.
+SpacePolicy's ACT extensions, configurations and utilities are distributed
+under the repository's MIT license. The project reuses its existing method
+implementations; it does not vendor the upstream ACT model.
 
-The ACT architecture, VAE, standard processors, optimizer/training loop,
-checkpoint API, and policy infrastructure are imported from LeRobot. LeRobot
-is not vendored here and retains its own Apache-2.0 license:
+LeRobot supplies ACT, the CVAE, standard processors, training and checkpoint
+infrastructure under Apache-2.0:
 https://github.com/huggingface/lerobot/blob/main/LICENSE
 
-ACT conceptual source: Zhao et al., Learning Fine-Grained Bimanual Manipulation
-with Low-Cost Hardware. No standalone ACT repository source was copied.
+ACT was introduced by Zhao et al. in *Learning Fine-Grained Bimanual
+Manipulation with Low-Cost Hardware*:
+https://github.com/tonyzhaozh/act
 
-PyTorch, torchvision, Transformers, Diffusers, NumPy, PyZMQ and other transitive
-dependencies retain their own licenses. Scene assets, datasets and weights are
-not included or relicensed by this package.
+PyTorch, torchvision, NumPy, Transformers, and other transitive dependencies
+retain their own licenses. LeRobot 0.5.1 also declares Diffusers as a base
+dependency; its presence in an installed environment does not mean this
+repository includes a diffusion-policy implementation.
+
+Scene assets, datasets, calibration files and pretrained weights are not
+included or relicensed by this project.

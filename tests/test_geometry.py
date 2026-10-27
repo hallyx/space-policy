@@ -4,7 +4,7 @@ import math
 
 import torch
 
-from lerobot_policy_spacepolicy_dit.geometry import (
+from lerobot_policy_spacepolicy_act.geometry import (
     apply_body_delta_xyzw,
     pose_geodesic_interpolate_xyzw,
     quaternion_geodesic_distance_xyzw,

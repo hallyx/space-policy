@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import torch
 
-from lerobot_policy_spacepolicy_dit.trajectory import (
+from lerobot_policy_spacepolicy_act.trajectory import (
     evaluate_arm7_cubic_hermite,
     sample_arm7_cubic_hermite,
 )

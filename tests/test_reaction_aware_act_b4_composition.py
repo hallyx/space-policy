@@ -10,7 +10,7 @@ from lerobot.configs.types import FeatureType, PolicyFeature
 import lerobot.policies.factory as policy_factory
 from lerobot.utils.constants import ACTION, OBS_IMAGES, OBS_STATE
 
-from lerobot_policy_spacepolicy_dit import ReactionAwareACTConfig, ReactionAwareACTPolicy
+from lerobot_policy_spacepolicy_act import ReactionAwareACTConfig, ReactionAwareACTPolicy
 
 
 def _config(**overrides: object) -> ReactionAwareACTConfig:

@@ -11,12 +11,12 @@ from lerobot.policies.factory import get_policy_class
 import lerobot.policies.factory as policy_factory
 from lerobot.utils.constants import ACTION, OBS_IMAGES, OBS_STATE
 
-from lerobot_policy_spacepolicy_dit import (
+from lerobot_policy_spacepolicy_act import (
     BaseAuxiliarySplineACTConfig,
     BaseAuxiliarySplineACTPolicy,
     SplineACTConfig,
 )
-from lerobot_policy_spacepolicy_dit.base_auxiliary import (
+from lerobot_policy_spacepolicy_act.base_auxiliary import (
     ActionConditionedBaseAuxiliaryHead,
     base_auxiliary_loss,
     derive_base_auxiliary_labels,

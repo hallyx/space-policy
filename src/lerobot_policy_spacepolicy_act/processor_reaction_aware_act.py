@@ -9,15 +9,14 @@ from typing import Any
 import torch
 
 from lerobot.policies.act.processor_act import make_act_pre_post_processors
-from lerobot.processor import (
-    PolicyAction,
-    PolicyProcessorPipeline,
+from lerobot.processor import PolicyProcessorPipeline
+from lerobot.processor.converters import (
+    batch_to_transition,
     policy_action_to_transition,
     transition_to_batch,
     transition_to_policy_action,
 )
-from lerobot.processor.converters import batch_to_transition
-from lerobot.types import EnvTransition, TransitionKey
+from lerobot.types import EnvTransition, PolicyAction, TransitionKey
 from lerobot.utils.constants import (
     POLICY_POSTPROCESSOR_DEFAULT_NAME,
     POLICY_PREPROCESSOR_DEFAULT_NAME,

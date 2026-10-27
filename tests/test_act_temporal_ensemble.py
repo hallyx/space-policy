@@ -7,7 +7,7 @@ import torch
 
 from lerobot.policies.act.modeling_act import ACTTemporalEnsembler
 
-from lerobot_policy_spacepolicy_dit.act_temporal_ensemble import (
+from lerobot_policy_spacepolicy_act.act_temporal_ensemble import (
     WindowedACTTemporalEnsembler,
     install_windowed_act_temporal_ensemble,
 )

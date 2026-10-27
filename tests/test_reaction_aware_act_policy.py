@@ -8,8 +8,8 @@ from lerobot.policies.act.configuration_act import ACTConfig
 from lerobot.policies.act.modeling_act import ACTPolicy
 from lerobot.utils.constants import ACTION, OBS_IMAGES, OBS_STATE
 
-from lerobot_policy_spacepolicy_dit import ReactionAwareACTConfig, ReactionAwareACTPolicy
-from lerobot_policy_spacepolicy_dit.reaction_model import (
+from lerobot_policy_spacepolicy_act import ReactionAwareACTConfig, ReactionAwareACTPolicy
+from lerobot_policy_spacepolicy_act.reaction_model import (
     JOINT_POSITION_SLICE,
     JOINT_VELOCITY_SLICE,
     LEFT_ARM_INDICES,
