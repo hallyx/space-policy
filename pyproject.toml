@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "lerobot_policy_spacepolicy_dit"
 version = "0.1.0"
-description = "Existing SpacePolicy ACT-related method code with paper correspondence audit"
+description = "LeRobot-based ACT policies for free-floating space manipulation"
 readme = "README.md"
 requires-python = ">=3.12"
 license = {text = "MIT"}
