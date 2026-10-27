@@ -1,7 +1,8 @@
 # SpacePolicy: Dynamics-Aware Imitation Learning for Free-Floating On-Orbit Capture
 
 **IROS 2026** · [Paper](https://rasevents.org/uploads/documents/pdfviewer/c1/0a/235289-1549.pdf) ·
-[BibTeX](CITATION.bib) · [Training guide](docs/training.md)
+[BibTeX](CITATION.bib) · [Project page source](docs/index.html) ·
+[Training guide](docs/training.md)
 
 SpacePolicy studies on-orbit capture with a free-floating spacecraft–manipulator
 system. Arm motions induce base drift and rotation, so an action that works
@@ -196,6 +197,20 @@ Tests use synthetic tensors and temporary checkpoints. They cover action and
 base losses, reaction rollout, processor boundaries, policy registration,
 checkpoint round trips, temporal aggregation, and geometry. No scene or
 dataset is required.
+
+## Project page
+
+The paper project page is in `docs/`, including the demonstration video,
+method figure, paper-reported results and BibTeX. Preview it locally with:
+
+```bash
+python3 tools/check_project_page.py
+python3 -m http.server 8000 --directory docs
+```
+
+Open `http://localhost:8000`. To deploy with GitHub Pages, select **Deploy from
+a branch → main → /docs** in the repository Pages settings. See the
+[deployment instructions](docs/deployment.md).
 
 ## Citation
 

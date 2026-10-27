@@ -12,7 +12,7 @@ dist/
 
 # User-provided data, assets, weights and run output
 data/
-assets/
+/assets/
 scenes/
 runs/
 outputs/
@@ -28,3 +28,6 @@ wandb/
 *.npz
 *.parquet
 *.mp4
+
+# Curated project-page demonstration
+!/docs/assets/space-policy-demo.mp4
