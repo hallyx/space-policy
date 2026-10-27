@@ -1,0 +1,30 @@
+# B2 Spline ACT: C0 latest-plan execution plus piecewise Hermite action15.
+# This is intentionally separate from reaction_aware_act: it has no R0
+# checkpoint, raw reaction state, base auxiliary, or causal reaction rollout.
+type: spline_act
+n_obs_steps: 1
+chunk_size: 32
+n_action_steps: 1
+temporal_ensemble_coeff: null
+action_representation: hermite_joint_trajectory
+micro_horizon: 4
+num_micro_chunks: 8
+replan_every_step: true
+use_latest_chunk_only: true
+predict_joint_velocity: true
+control_dt_s: 0.02
+action_bc_weight: 1.0
+knot_loss_weight: 1.0
+integration_weight: 0.0
+smoothness_weight: 0.0
+base_auxiliary_enabled: false
+vision_backbone: resnet18
+pretrained_backbone_weights: null
+dim_model: 512
+n_heads: 8
+n_encoder_layers: 4
+n_decoder_layers: 1
+optimizer_lr: 1.0e-5
+state_dim: 8
+action_dim: 15
+action_contract: "[B, 1, 15] -> piecewise Hermite arm position7/desired velocity7 + gripper position1; latest-plan only"

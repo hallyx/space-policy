@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "lerobot_policy_spacepolicy_dit"
+version = "0.1.0"
+description = "Existing SpacePolicy ACT-related method code with paper correspondence audit"
+readme = "README.md"
+requires-python = ">=3.12"
+license = {text = "MIT"}
+dependencies = ["lerobot==0.5.1", "transformers==5.3.0", "diffusers>=0.27.2,<0.36.0", "pyzmq>=25"]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["lerobot_policy_spacepolicy_dit*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]

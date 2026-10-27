@@ -1,0 +1,94 @@
+--- a/src/lerobot_policy_spacepolicy_dit/__init__.py
++++ b/src/lerobot_policy_spacepolicy_dit/__init__.py
+@@ -12,67 +12,30 @@
+ from typing import Any
+ 
+ 
+-_LAZY_EXPORTS: dict[str, tuple[str, str, str | None]] = {
+-    "SpacePolicyDiTConfig": (".configuration_spacepolicy_dit", "SpacePolicyDiTConfig", None),
+-    "SpacePolicyDiTPolicy": (".modeling_spacepolicy_dit", "SpacePolicyDiTPolicy", None),
+-    "make_spacepolicy_dit_pre_post_processors": (
+-        ".processor_spacepolicy_dit",
+-        "make_spacepolicy_dit_pre_post_processors",
+-        None,
+-    ),
+-    "ReactionAwareACTConfig": (
+-        ".configuration_reaction_aware_act",
+-        "ReactionAwareACTConfig",
+-        "reaction",
+-    ),
+-    "ReactionAwareACTPolicy": (
+-        ".modeling_reaction_aware_act",
+-        "ReactionAwareACTPolicy",
+-        "reaction",
+-    ),
+-    "make_reaction_aware_act_pre_post_processors": (
+-        ".processor_reaction_aware_act",
+-        "make_reaction_aware_act_pre_post_processors",
+-        "reaction",
+-    ),
+-    "install_reaction_aware_act_processor_factory": (
+-        ".processor_reaction_aware_act",
+-        "install_reaction_aware_act_processor_factory",
+-        "reaction",
+-    ),
+-    "SplineACTConfig": (".configuration_spline_act", "SplineACTConfig", None),
+-    "SplineACTPolicy": (".modeling_spline_act", "SplineACTPolicy", None),
+-    "TargetConditionedACTConfig": (
+-        ".configuration_target_conditioned_act",
+-        "TargetConditionedACTConfig",
+-        None,
+-    ),
+-    "TargetConditionedACTPolicy": (
+-        ".modeling_target_conditioned_act",
+-        "TargetConditionedACTPolicy",
+-        None,
+-    ),
+-    "BaseAuxiliarySplineACTConfig": (
+-        ".configuration_base_aux_spline_act",
+-        "BaseAuxiliarySplineACTConfig",
+-        "base_aux",
+-    ),
+-    "BaseAuxiliarySplineACTPolicy": (
+-        ".modeling_base_aux_spline_act",
+-        "BaseAuxiliarySplineACTPolicy",
+-        "base_aux",
+-    ),
+-    "make_base_aux_spline_act_pre_post_processors": (
+-        ".processor_base_aux_spline_act",
+-        "make_base_aux_spline_act_pre_post_processors",
+-        "base_aux",
+-    ),
+-    "install_base_aux_spline_act_runtime_shims": (
+-        ".processor_base_aux_spline_act",
+-        "install_base_aux_spline_act_runtime_shims",
+-        "base_aux",
+-    ),
+-}
++_LAZY_EXPORTS: dict[str, tuple[str, str, str | None]] = {'ReactionAwareACTConfig': ('.configuration_reaction_aware_act',
++                            'ReactionAwareACTConfig',
++                            'reaction'),
++ 'ReactionAwareACTPolicy': ('.modeling_reaction_aware_act', 'ReactionAwareACTPolicy', 'reaction'),
++ 'make_reaction_aware_act_pre_post_processors': ('.processor_reaction_aware_act',
++                                                 'make_reaction_aware_act_pre_post_processors',
++                                                 'reaction'),
++ 'install_reaction_aware_act_processor_factory': ('.processor_reaction_aware_act',
++                                                  'install_reaction_aware_act_processor_factory',
++                                                  'reaction'),
++ 'SplineACTConfig': ('.configuration_spline_act', 'SplineACTConfig', None),
++ 'SplineACTPolicy': ('.modeling_spline_act', 'SplineACTPolicy', None),
++ 'BaseAuxiliarySplineACTConfig': ('.configuration_base_aux_spline_act',
++                                  'BaseAuxiliarySplineACTConfig',
++                                  'base_aux'),
++ 'BaseAuxiliarySplineACTPolicy': ('.modeling_base_aux_spline_act',
++                                  'BaseAuxiliarySplineACTPolicy',
++                                  'base_aux'),
++ 'make_base_aux_spline_act_pre_post_processors': ('.processor_base_aux_spline_act',
++                                                  'make_base_aux_spline_act_pre_post_processors',
++                                                  'base_aux'),
++ 'install_base_aux_spline_act_runtime_shims': ('.processor_base_aux_spline_act',
++                                               'install_base_aux_spline_act_runtime_shims',
++                                               'base_aux')}
+ 
+ __all__ = list(_LAZY_EXPORTS)
+ _INSTALLED_HOOKS: set[str] = set()

@@ -1,0 +1,16 @@
+# ACT baseline for canonical state8/action15 Joint-PV.
+type: act
+n_obs_steps: 1
+chunk_size: 32
+n_action_steps: 8
+temporal_ensemble_coeff: null
+vision_backbone: resnet18
+pretrained_backbone_weights: null
+dim_model: 512
+n_heads: 8
+n_encoder_layers: 4
+n_decoder_layers: 1
+optimizer_lr: 1.0e-5
+state_dim: 8
+action_dim: 15
+action_contract: "[B, n_action_steps, 15] -> arm position7 + desired velocity7 + gripper position1"

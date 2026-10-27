@@ -1,0 +1,44 @@
+# Reaction-Aware ACT v1: canonical state8/action15 Joint-PV only.
+# This profile intentionally differs from frozen ACT B0: it always executes the
+# latest single action and never uses ACT temporal ensembling.
+type: reaction_aware_act
+reaction_aware: true
+n_obs_steps: 1
+chunk_size: 32
+n_action_steps: 1
+temporal_ensemble_coeff: null
+action_representation: hermite_joint_trajectory
+micro_horizon: 4
+num_micro_chunks: 8
+replan_every_step: true
+use_latest_chunk_only: true
+reaction_model_type: learned_transition
+freeze_reaction_model: true
+require_precontact_control_state: true
+precontact_control_states: [13, 14, 15]
+# Sealed B4 composition: B3's train-only action-conditioned base auxiliary is
+# present in addition to frozen R0 rollout.  Its [t,t+4] labels never enter
+# ACT/R0 inputs and its prediction never feeds action decoding or rollout.
+base_auxiliary_enabled: true
+base_auxiliary_horizon: 4
+base_auxiliary_hidden_dim: 256
+base_auxiliary_loss_weight: 1.0
+base_auxiliary_translation_weight: 1.0
+base_auxiliary_rotation_weight: 1.0
+base_auxiliary_twist_weight: 1.0
+base_auxiliary_label_schema: body_delta_se3_future_body_twist_v1
+# Supply the independently validated checkpoint via
+# REACTION_MODEL_CHECKPOINT=<.../reaction_model.pt> when launching training.
+# A random frozen model is allowed only with the explicit smoke-only launcher flag.
+integration_weight: 0.0
+smoothness_weight: 0.0
+vision_backbone: resnet18
+pretrained_backbone_weights: null
+dim_model: 512
+n_heads: 8
+n_encoder_layers: 4
+n_decoder_layers: 1
+optimizer_lr: 1.0e-5
+state_dim: 8
+action_dim: 15
+action_contract: "[B, 1, 15] -> arm position7 + desired velocity7 + gripper position1; latest-plan only"

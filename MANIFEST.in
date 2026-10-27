@@ -1,0 +1,5 @@
+include LICENSE README.md provenance.json PAPER_CODE_AUDIT.md VALIDATION.md THIRD_PARTY_NOTICES.md
+recursive-include configs *.yaml
+recursive-include tests *.py
+recursive-include tools *.py
+recursive-include examples *.py

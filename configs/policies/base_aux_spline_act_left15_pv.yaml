@@ -1,0 +1,38 @@
+# B3: B2 Hermite ACT + output-only action-conditioned base auxiliary head.
+# Canonical policy input remains visual observations plus state8.  The two
+# base diagnostics are a train-only [t, t+4] label window; this type has no R0,
+# no ReactionState, no predicted-state feedback and no causal rollout.
+type: base_aux_spline_act
+n_obs_steps: 1
+chunk_size: 32
+n_action_steps: 1
+temporal_ensemble_coeff: null
+action_representation: hermite_joint_trajectory
+micro_horizon: 4
+num_micro_chunks: 8
+replan_every_step: true
+use_latest_chunk_only: true
+predict_joint_velocity: true
+control_dt_s: 0.02
+action_bc_weight: 1.0
+knot_loss_weight: 1.0
+integration_weight: 0.0
+smoothness_weight: 0.0
+base_auxiliary_enabled: true
+base_auxiliary_horizon: 4
+base_auxiliary_hidden_dim: 256
+base_auxiliary_loss_weight: 1.0
+base_auxiliary_translation_weight: 1.0
+base_auxiliary_rotation_weight: 1.0
+base_auxiliary_twist_weight: 1.0
+base_auxiliary_label_schema: body_delta_se3_future_body_twist_v1
+vision_backbone: resnet18
+pretrained_backbone_weights: null
+dim_model: 512
+n_heads: 8
+n_encoder_layers: 4
+n_decoder_layers: 1
+optimizer_lr: 1.0e-5
+state_dim: 8
+action_dim: 15
+action_contract: "[B, 1, 15] -> B2 Hermite action15; B3 base head is train-only and output-only"
