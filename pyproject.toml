@@ -5,7 +5,8 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "lerobot_policy_spacepolicy_act"
 version = "0.1.0"
-description = "ACT-based visuomotor policies with base-motion supervision and reaction modeling"
+description = "Dynamics-aware imitation learning for free-floating on-orbit capture"
+keywords = ["space-robotics", "imitation-learning", "on-orbit-capture", "act"]
 readme = "README.md"
 requires-python = ">=3.12"
 license = {text = "MIT"}
@@ -20,6 +21,7 @@ dependencies = [
 dev = ["pytest>=8.0"]
 
 [project.urls]
+Paper = "https://rasevents.org/uploads/documents/pdfviewer/c1/0a/235289-1549.pdf"
 Repository = "https://github.com/hallyx/space-policy"
 Issues = "https://github.com/hallyx/space-policy/issues"
 

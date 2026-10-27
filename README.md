@@ -1,18 +1,35 @@
-# SpacePolicy
+# SpacePolicy: Dynamics-Aware Imitation Learning for Free-Floating On-Orbit Capture
 
-**ACT-based visuomotor learning for free-floating space manipulation.**
+**IROS 2026** · [Paper](https://rasevents.org/uploads/documents/pdfviewer/c1/0a/235289-1549.pdf) ·
+[BibTeX](CITATION.bib) · [Training guide](docs/training.md)
 
-SpacePolicy extends [LeRobot](https://github.com/huggingface/lerobot)'s Action
-Chunking Transformer (ACT) with base-motion supervision and learned reaction
-modeling. Multi-view images and joint observations drive action-chunk
-prediction, while trajectory decoding and dynamics-related objectives support
-experiments with coupled base–arm motion.
+SpacePolicy studies on-orbit capture with a free-floating spacecraft–manipulator
+system. Arm motions induce base drift and rotation, so an action that works
+under fixed-base assumptions can miss its target when executed in microgravity.
+The paper addresses this coupling through dynamics-aware demonstration
+construction and physics-conditioned action learning.
 
-This repository provides the ACT-based policies, configuration profiles, and
-tests. Simulation scenes, robot and satellite assets, datasets, and pretrained
-weights are not included.
+## Paper overview
 
-## Methods
+- **Dynamics-aware demonstrations.** A hindsight strategy, “shoot first, draw
+  the target later,” aligns the target grasp keypoint with the actually reached
+  end-effector pose. Replaying the recorded motion and re-rendering the scene
+  produce visually consistent observation–action pairs that retain the effects
+  of base reactions.
+- **Physics-conditioned action learning.** The method predicts a future
+  base-pose sequence and embeds that prediction as a condition for action
+  generation, anticipating disturbances during capture.
+- **Long-horizon capture motions.** Action chunks represent joint positions,
+  joint velocities, and gripper commands over the Approach–Align–Capture
+  progression. The paper evaluates capture on Aura, Dawn, and Hubble in a
+  free-floating simulation setting.
+
+## Released methods
+
+This repository provides the project's ACT-based policy components, including
+base-motion auxiliary supervision, learned Reaction modeling, and trajectory
+decoding. The implementation uses LeRobot for the ACT backbone and training
+infrastructure.
 
 | Policy | Description |
 | --- | --- |
@@ -26,8 +43,13 @@ training supervision. The Reaction model predicts robot-state transitions
 between action micro-chunks. Hermite decoding, rigid-body geometry, state
 contracts, and processor hooks support these ACT extensions.
 
-Detailed architecture and manuscript correspondence are in
-[Implementation notes](docs/implementation.md).
+The released auxiliary-supervision and reaction-rollout paths have different
+interfaces from the paper's future-base physics-token architecture. Their
+relationship is documented in [Implementation notes](docs/implementation.md).
+
+The release contains method code, configuration profiles, and tests. Simulation
+scenes, robot and satellite assets, datasets, and pretrained weights are not
+included.
 
 ## Installation
 
@@ -78,7 +100,7 @@ compatible transition-model checkpoint. See
 
 ## Training
 
-Train the native ACT baseline with LeRobot's standard entry point:
+Train the ACT baseline with the standard training entry point:
 
 ```bash
 python -m lerobot.scripts.lerobot_train \

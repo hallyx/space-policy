@@ -1,4 +1,4 @@
-# Architecture and data contracts
+# Implementation details
 
 SpacePolicy uses native LeRobot ACT as its visual action proposal backbone.
 The included extensions implement the following paths:
@@ -54,15 +54,19 @@ contact-phase controller. Training also needs the preceding action; its
 requested action window therefore includes the previous command plus the
 future chunk. See `configuration_reaction_aware_act.py` and its processor.
 
-## Relationship to the manuscript
+## Relationship to the paper
 
-The ACT backbone, joint-PV layout, base-motion supervision, and reaction
-modeling are retained from the existing project. Their exact implementation
-must be distinguished from the manuscript's proposed encoder-memory ->
+The [SpacePolicy paper](https://rasevents.org/uploads/documents/pdfviewer/c1/0a/235289-1549.pdf)
+introduces hindsight demonstration construction and future-base-conditioned
+action learning for free-floating on-orbit capture. This release contains the
+project's ACT-based action representation, base auxiliary supervision, and
+reaction-model components.
+
+The implementation below differs from the paper's proposed encoder-memory ->
 future absolute base-pose sequence -> physics-token -> action-decoder path.
 The available auxiliary head is action-conditioned and output-only; the
 reaction variant supplies a separate state rollout. Their losses, labels,
-and 32-step default profiles also differ from the manuscript's description.
+and 32-step default profiles also differ from the paper's description.
 This repository does not claim complete reproduction of the paper's
 architecture or numerical tables.
 

@@ -1,6 +1,7 @@
 # Training and deployment
 
-All policies use LeRobot's native training loop. Install the package before
+The released SpacePolicy components use LeRobot's native ACT training loop.
+Install the package before
 launching the trainer so LeRobot can discover the ACT extensions. Dataset,
 optimizer, logging, resume, and checkpoint options use LeRobot's standard CLI.
 
