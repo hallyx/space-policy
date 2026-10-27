@@ -52,3 +52,15 @@ not fresh evaluations of the released code. Asset provenance is documented in
 To change the page, edit the HTML/CSS files and run the checker before pushing.
 If the root `CITATION.bib` changes, update both `docs/citation.bib` and the
 inline BibTeX block in `index.html`; the checker verifies that they agree.
+
+## Design references
+
+The page uses a black-and-white publication layout with blue links. Its centered
+title and author block, abstract, media-first presentation and result tables
+follow common robotics project-page conventions, informed by:
+
+- ALOHA / ACT: https://tonyzhaozh.github.io/aloha/
+- OpenVLA: https://openvla.github.io/
+- Diffusion Policy: https://diffusion-policy.cs.columbia.edu/
+
+The page does not reuse their source code, media or research content.

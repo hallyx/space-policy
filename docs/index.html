@@ -4,34 +4,29 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="SpacePolicy: dynamics-aware imitation learning for free-floating on-orbit capture. IROS 2026 research project, method, video and paper-reported results.">
-  <meta name="theme-color" content="#f9faf8">
+  <meta name="theme-color" content="#ffffff">
   <meta property="og:title" content="SpacePolicy — Dynamics-Aware Imitation Learning for Free-Floating On-Orbit Capture">
   <meta property="og:description" content="Learning capture motions with free-floating base reactions. IROS 2026.">
   <meta property="og:type" content="website">
   <title>SpacePolicy — Free-Floating On-Orbit Capture</title>
-  <link rel="icon" href="favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="favicon.svg?v=2" type="image/svg+xml">
+  <link rel="stylesheet" href="style.css?v=2">
   <script src="app.js" defer></script>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
-<header class="site-header">
-  <a class="brand" href="#" aria-label="SpacePolicy home"><svg viewBox="0 0 30 30" aria-hidden="true"><circle cx="15" cy="15" r="5"/><ellipse cx="15" cy="15" rx="14" ry="6" transform="rotate(-32 15 15)"/><circle class="satellite" cx="25.5" cy="8.5" r="2"/></svg>SpacePolicy</a>
-  <nav aria-label="Page navigation"><a href="#method">Method</a><a href="#results">Results</a><a href="#citation">Citation</a></nav>
-</header>
 <main id="main">
   <section class="hero" aria-labelledby="paper-title">
-    <p class="venue">IROS 2026 <span>·</span> SPACE ROBOTICS</p>
     <h1 id="paper-title"><span class="project-title">SpacePolicy</span><span class="paper-subtitle">Dynamics-Aware Imitation Learning<br class="desktop-break"> for Free-Floating On-Orbit Capture</span></h1>
     <p class="authors"><span>Bing Han<sup>*</sup></span>, <span>Xing Hu<sup>*</sup></span>, <span>Bingquan Wang</span>, <span>Runzhe Zhan</span>, <span>Jianing Yang</span>, <span>Zhihang Fu</span>, <span>Xiangkang Zhao</span>, <span>Chenxi Wang<sup>†</sup></span>, <span>Zhi Zhai</span>, <span>Jinxin Liu</span>, <span>Xuefeng Chen</span></p>
     <p class="affiliation">Xi’an Jiaotong University</p>
+    <p class="venue">IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS), 2026</p>
     <p class="author-note"><sup>*</sup> Equal contribution &nbsp; <sup>†</sup> Corresponding author</p>
     <div class="paper-links">
-      <a class="button primary" href="https://rasevents.org/uploads/documents/pdfviewer/c1/0a/235289-1549.pdf" target="_blank" rel="noopener">Read paper <span aria-hidden="true">↗</span></a>
-      <a class="button" href="https://github.com/hallyx/space-policy" target="_blank" rel="noopener">Code <span aria-hidden="true">↗</span></a>
-      <a class="button" href="#citation">BibTeX <span aria-hidden="true">↓</span></a>
+      <a class="button primary" href="https://rasevents.org/uploads/documents/pdfviewer/c1/0a/235289-1549.pdf" target="_blank" rel="noopener">Paper</a>
+      <a class="button" href="https://github.com/hallyx/space-policy" target="_blank" rel="noopener">Code</a>
+      <a class="button" href="#citation">BibTeX</a>
     </div>
-    <p class="takeaway">Learning capture motions that account for the spacecraft’s own reaction.</p>
   </section>
 
   <figure class="demo" id="video">
@@ -42,29 +37,28 @@
     <figcaption><span>Demonstrations and capture rollouts in a free-floating setting.</span><a href="assets/space-policy-demo.mp4" download>Download video <span aria-hidden="true">↓</span></a></figcaption>
   </figure>
 
-  <section class="highlights" aria-label="Paper-reported average performance, Table I">
-    <div><p class="stat-value">63.33<span>%</span></p><p class="stat-label">Average capture success</p></div>
-    <div><p class="stat-value">7.8<span>cm</span></p><p class="stat-label">Average terminal distance</p></div>
-    <div><p class="stat-value">+20.66<span>pp</span></p><p class="stat-label">Success over ACT + GJM</p></div>
+  <section class="section abstract-section" id="abstract" aria-labelledby="abstract-title">
+    <h2 id="abstract-title">Abstract</h2>
+    <p>Manipulation in microgravity couples arm motion with spacecraft drift and rotation, creating a gap between planned actions and their execution. SpacePolicy addresses this challenge through hindsight demonstration construction and physics-conditioned action learning. Demonstrations retain the deviations caused by a floating base, while a future-base prediction branch supplies dynamic context for action generation. Experiments on Aura, Dawn, and Hubble evaluate capture without additional compensation control.</p>
   </section>
 
   <section class="section" id="method" aria-labelledby="method-title">
-    <div class="section-heading"><span class="eyebrow">01 / METHOD</span><h2 id="method-title">Learn with the dynamics.</h2></div>
+    <div class="section-heading"><h2 id="method-title">Method</h2></div>
     <p class="section-intro">In microgravity, arm motion moves the base too. SpacePolicy addresses this coupling in both demonstration construction and action learning, so the policy can anticipate the consequences of free-floating motion.</p>
     <figure class="method-figure">
       <a href="assets/method.jpg" target="_blank" rel="noopener" aria-label="Open the full-resolution SpacePolicy method figure"><img src="assets/method.jpg" width="2099" height="532" loading="lazy" alt="SpacePolicy architecture: visual observations, proprioception and latent z enter a Transformer encoder; a base-pose decoder predicts future base poses, which a projector embeds as physics-conditioning tokens for the action decoder."></a>
       <figcaption>Future base motion becomes a condition for action generation. Figure 3 of the paper.</figcaption>
     </figure>
     <div class="method-columns">
-      <article><span class="step">01</span><h3>Dynamics-aware demonstrations</h3><p>Execute motions in a floating-base system, align the target to the actually reached grasp pose in hindsight, and re-render the recorded trajectory. The resulting visual supervision retains execution drift.</p></article>
-      <article><span class="step">02</span><h3>Physics-conditioned action learning</h3><p>Predict a future base-pose sequence from observation memory and project it into conditioning tokens. The action decoder uses this anticipated motion to generate joint position, velocity and gripper chunks.</p></article>
+      <article><h3>Dynamics-aware demonstrations</h3><p>Execute motions in a floating-base system, align the target to the actually reached grasp pose in hindsight, and re-render the recorded trajectory. The resulting visual supervision retains execution drift.</p></article>
+      <article><h3>Physics-conditioned action learning</h3><p>Predict a future base-pose sequence from observation memory and project it into conditioning tokens. The action decoder uses this anticipated motion to generate joint position, velocity and gripper chunks.</p></article>
     </div>
     <p class="method-note">A longer prediction horizon carries intent across <strong>Approach → Align → Capture</strong>, supporting smoother transitions.</p>
   </section>
 
   <section class="section" id="results" aria-labelledby="results-title">
-    <div class="section-heading"><span class="eyebrow">02 / EXPERIMENTS</span><h2 id="results-title">Capture across three targets.</h2></div>
-    <p class="section-intro">The paper evaluates Aura, Dawn and Hubble in NVIDIA Isaac Sim with zero gravity. For each target, policies are trained on 300 trajectories and tested on 100 unseen capture scenarios.</p>
+    <div class="section-heading"><h2 id="results-title">Experimental Results</h2></div>
+    <p class="section-intro">The paper evaluates Aura, Dawn and Hubble in NVIDIA Isaac Sim with zero gravity. For each target, policies are trained on 300 trajectories and tested on 100 unseen capture scenarios. SpacePolicy achieves <strong>63.33% average capture success</strong> and <strong>7.8 cm average terminal distance</strong>, improving success by 20.66 percentage points over ACT + GJM.</p>
     <div class="table-wrap" role="region" aria-labelledby="comparison-caption" tabindex="0">
       <table>
         <caption id="comparison-caption">Capture performance · Table I</caption>
@@ -78,12 +72,12 @@
       </table>
     </div>
     <p class="table-note">SR: successful physical capture by the end of a rollout. Dist.: terminal distance to the nearest docking-ring surface for unsuccessful episodes. Averages are across the three targets. GJM: generalized Jacobian compensation.</p>
-    <div class="ablation"><span class="small-label">COMPONENT STUDY · TABLE III</span><p>Increasing the horizon from 20 to 100 steps raises success from <strong>54.67% to 59.67%</strong>. Adding future-base prediction and physics-conditioning reaches <strong>63.33%</strong>, with terminal distance reduced from 9.8 to 7.8 cm.</p></div>
+    <div class="ablation"><h3>Effect of prediction horizon and physics-conditioning</h3><p>Increasing the horizon from 20 to 100 steps raises success from <strong>54.67% to 59.67%</strong>. Adding future-base prediction and physics-conditioning reaches <strong>63.33%</strong>, with terminal distance reduced from 9.8 to 7.8 cm.</p></div>
     <p class="source-note">Results and method descriptions on this page are reported in the <a href="https://rasevents.org/uploads/documents/pdfviewer/c1/0a/235289-1549.pdf#page=6" target="_blank" rel="noopener">published paper</a>. They are not new benchmark runs of the released code. See <a href="https://github.com/hallyx/space-policy/blob/main/docs/implementation.md" target="_blank" rel="noopener">implementation notes</a> for the release scope.</p>
   </section>
 
   <section class="section citation-section" id="citation" aria-labelledby="citation-title">
-    <div class="citation-heading"><div class="section-heading"><span class="eyebrow">03 / CITATION</span><h2 id="citation-title">Cite SpacePolicy.</h2></div><button id="copy-citation" type="button">Copy BibTeX <span aria-hidden="true">⧉</span></button></div>
+    <div class="citation-heading"><div class="section-heading"><h2 id="citation-title">BibTeX</h2></div><button id="copy-citation" type="button">Copy BibTeX <span aria-hidden="true">⧉</span></button></div>
     <pre><code id="citation-code">@inproceedings{han2026spacepolicy,
   author    = {Han, Bing and Hu, Xing and Wang, Bingquan and Zhan, Runzhe and
                Yang, Jianing and Fu, Zhihang and Zhao, Xiangkang and
@@ -98,6 +92,6 @@
     <p class="citation-download"><a href="citation.bib" download>Download .bib file <span aria-hidden="true">↓</span></a><span id="copy-status" role="status" aria-live="polite"></span></p>
   </section>
 </main>
-<footer><a class="brand" href="#">SpacePolicy</a><p>IROS 2026 · Xi’an Jiaotong University</p><a href="https://github.com/hallyx/space-policy">GitHub <span aria-hidden="true">↗</span></a></footer>
+<footer><p>SpacePolicy · IROS 2026 · Xi’an Jiaotong University</p><a href="https://github.com/hallyx/space-policy">Code on GitHub</a></footer>
 </body>
 </html>
