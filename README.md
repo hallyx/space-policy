@@ -46,8 +46,8 @@ existing project code and retain their original behavior.
 Use Python 3.12 and a PyTorch installation compatible with your hardware.
 
 ```bash
-git clone https://github.com/hallyx/space_policy.git
-cd space_policy
+git clone https://github.com/hallyx/space-policy.git
+cd space-policy
 python -m venv .venv
 source .venv/bin/activate
 python -m pip install --upgrade pip
