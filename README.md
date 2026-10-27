@@ -175,6 +175,27 @@ base losses, reaction rollout, processor boundaries, policy registration,
 checkpoint round trips, temporal aggregation, and geometry. No scene or
 dataset is required.
 
+## Citation
+
+If you use SpacePolicy in your research, please cite the paper below.
+
+[Paper](https://rasevents.org/uploads/documents/pdfviewer/c1/0a/235289-1549.pdf) ·
+[Download BibTeX](CITATION.bib)
+
+```bibtex
+@inproceedings{han2026spacepolicy,
+  author    = {Han, Bing and Hu, Xing and Wang, Bingquan and Zhan, Runzhe and
+               Yang, Jianing and Fu, Zhihang and Zhao, Xiangkang and
+               Wang, Chenxi and Zhai, Zhi and Liu, Jinxin and Chen, Xuefeng},
+  title     = {{SpacePolicy}: Dynamics-Aware Imitation Learning for Free-Floating On-Orbit Capture},
+  booktitle = {2026 IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS)},
+  year      = {2026},
+  pages     = {9912--9919},
+  publisher = {IEEE},
+  url       = {https://rasevents.org/uploads/documents/pdfviewer/c1/0a/235289-1549.pdf}
+}
+```
+
 ## Acknowledgements
 
 SpacePolicy uses LeRobot's ACT backbone, CVAE, training loop, processors, and

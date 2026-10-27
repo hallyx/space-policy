@@ -1,4 +1,4 @@
-include LICENSE README.md THIRD_PARTY_NOTICES.md
+include LICENSE README.md THIRD_PARTY_NOTICES.md CITATION.bib
 recursive-include configs *.yaml
 recursive-include docs *.md
 recursive-include tests *.py
